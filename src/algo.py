@@ -16,19 +16,17 @@ def depth_first_search(mat: np.array, curr_depth: tuple) -> np.array:
     if curr_depth == (size - 1, size - 1):
         return mat
 
-    # end of row, jump to next row
-    if curr_depth[1] > size - 1:
-        mat = depth_first_search(mat, (curr_depth[0] + 1, 1))
-
     # on the diagonal, going down, move one step forward x
     if mat[curr_depth[0], curr_depth[1]] == -2:
         mat[curr_depth[0], curr_depth[1]] = -3
-        mat = depth_first_search(mat, (curr_depth[0], curr_depth[1] + 1))
+        #mat = depth_first_search(mat, (curr_depth[0], curr_depth[1] + 1))
+        curr_depth = (curr_depth[0], curr_depth[1] + 1)
 
     # on the diagonal, going up, move one step back x
     if mat[curr_depth[0], curr_depth[1]] == -3:
         mat[curr_depth[0], curr_depth[1]] = -2
-        mat = depth_first_search(mat, (curr_depth[0], curr_depth[1] + 1))
+        #mat = depth_first_search(mat, (curr_depth[0], curr_depth[1] + 1))
+        curr_depth = (curr_depth[0], curr_depth[1] - 1)
 
     # general case, increment number in field and check if valid,
     # if valid continue deeper, if not step back
@@ -40,6 +38,12 @@ def depth_first_search(mat: np.array, curr_depth: tuple) -> np.array:
 
         if test_valid_schedule(test_mat):
             mat = test_mat
+
+            # end of row, jump to next row
+            #if curr_depth[1] > size - 1:
+            if curr_depth[1] >= size - 1:
+                curr_depth = (curr_depth[0] + 1, 0)
+            
             mat = depth_first_search(mat, (curr_depth[0], curr_depth[1] + 1))
             return mat
 
